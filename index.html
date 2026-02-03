@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Don't Cross The Yellow Line</title>
+<title>Cross The Yellow Line</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
@@ -109,7 +109,7 @@
 
     <div id="start-screen" class="screen">
         <div>
-            <h1>DON'T CROSS<br>THE YELLOW LINE</h1>
+            <h1>CROSS<br>THE YELLOW LINE</h1>
             <span class="subtitle">UNE EXPÉRIENCE INTERACTIVE</span>
         </div>
         <div class="info-radar">
@@ -187,20 +187,19 @@ window.onload = function() {
 };
 
 const factsDB = [
-    { t: "L'alcool ou la drogue ne sont pas des excuses pour l'agresseur, ce sont des circonstances aggravantes.", s: "Source : Ministère de la Justice" },
-	{ t: "Une femme meurt tous les 3 jours sous les coups de son conjoint.", s: "Source : Ministère de l'Intérieur" },
-    { t: "90% des utilisatrices de transports ont déjà subi du harcèlement.", s: "Source : HCEfh" },
-    { t: "Le consentement doit être libre et éclairé. Sans OUI, c'est NON.", s: "Source : Code Pénal" },
-	{ t: "Le sexisme au travail, ce n'est pas de la séduction. C'est une humiliation qui vise à exclure.", s: "Source : Conseil Supérieur de l'Égalité Pro" },
-    { t: "9 femmes sur 10 adoptent des stratégies d'évitement dans la rue.", s: "Source : HCEfh" },
-	{ t: "Diffuser des photos intimes sans accord (revenge porn) est un délit puni de 2 ans de prison.", s: "Source : Article 226-1 du Code Pénal" },
-    { t: "Besoin d'aide ? Le 3919 est anonyme, gratuit et n'apparaît pas sur les factures téléphoniques.", s: "Source : Service-Public.fr" },
-    { t: "La jalousie excessive n'est pas une preuve d'amour.", s: "Source : NousToutes" },
-	{ t: "La sidération psychique empêche souvent la victime de crier ou de fuir. Ce silence n'est PAS un consentement.", s: "Source : Mémoire Traumatique et Victimologie" },
-	{ t: "Siffler, suivre ou faire des commentaires sexuels dans la rue est un délit puni par la loi (Outrage Sexiste).", s: "Source : Code Pénal" },
-	{ t: "30% des salariées ont déjà été harcelées ou agressées sexuellement sur leur lieu de travail.", s: "Source : Ifop / Défenseur des droits" },
+    { t: "Une femme meurt tous les 3 jours sous les coups de son conjoint ou ex-conjoint.", s: "Source : Ministère de l'Intérieur" },
+    { t: "Dans 91% des cas d'agressions sexuelles, la victime connaît son agresseur (ami, famille, collègue).", s: "Source : Enquête VIRAGE (INED)" },
+    { t: "La sidération psychique empêche souvent la victime de crier ou de fuir. Ce silence n'est PAS un consentement.", s: "Source : Mémoire Traumatique et Victimologie" },
+    { t: "100% des utilisatrices de transports en commun ont déjà subi du harcèlement sexiste ou sexuel.", s: "Source : HCEfh" },
+    { t: "8 femmes sur 10 ont peur de rentrer seules le soir.", s: "Source : Sondage Ifop" },
+    { t: "Siffler, suivre ou faire des commentaires sexuels dans la rue est un délit puni par la loi (Outrage Sexiste).", s: "Source : Code Pénal" },
+    { t: "30% des salariées ont déjà été harcelées ou agressées sexuellement sur leur lieu de travail.", s: "Source : Ifop / Défenseur des droits" },
     { t: "Exiger les mots de passe ou géolocaliser sa partenaire n'est pas de l'amour, c'est de la violence psychologique.", s: "Source : Centre Hubertine Auclert" },
-	{ t: "Vous pouvez porter plainte dans n'importe quel commissariat, même sans certificat médical.", s: "Source : Ministère de l'Intérieur" }
+    { t: "Diffuser des photos intimes sans accord (revenge porn) est un délit puni de 2 ans de prison.", s: "Source : Article 226-1 du Code Pénal" },
+    { t: "Le consentement doit être libre, éclairé et enthousiaste. L'absence de 'non' ne vaut pas 'oui'.", s: "Source : Amnesty International" },
+    { t: "La tenue vestimentaire n'est jamais une invitation au viol. La seule cause du viol, c'est le violeur.", s: "Source : Collectif #NousToutes" },
+    { t: "L'alcool ou la drogue ne sont pas des excuses pour l'agresseur, ce sont des circonstances aggravantes.", s: "Source : Ministère de la Justice" },
+    { t: "Besoin d'aide ? Le 3919 est anonyme, gratuit et n'apparaît pas sur les factures téléphoniques.", s: "Source : Service-Public.fr" }
 ];
 
 const CONFIG = { TILE: 40, WIDTH: 21, YELLOW_LINE: 100, BACK_WIN: -20 };
@@ -265,7 +264,8 @@ function initThreeJS() {
     scene.add(mapGroup);
     
     createPlayer();
-    createHolos(); // FLÈCHES AU SOL UNIQUEMENT
+    // PLUS DE PANNEAU ICI
+    createHolos(); 
     resetGame();
     animate();
 
@@ -273,21 +273,20 @@ function initThreeJS() {
     window.addEventListener('keydown', onKeyDown);
 }
 
-// --- NOUVELLES FLÈCHES SIMPLIFIÉES ---
+// --- FLÈCHES AU SOL UNIQUEMENT ---
 function createHolos() {
-    // 1. Texture avec UNE SEULE grosse flèche
     const canvas = document.createElement('canvas');
     canvas.width = 128; canvas.height = 128;
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = '#ff0000'; // ROUGE
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = 'bold 100px Arial'; // GROS
-    ctx.fillText('⬆', 64, 64); 
+    ctx.font = 'bold 100px Arial'; 
+    ctx.fillText('⬆', 64, 64); // UNE SEULE GROSSE FLÈCHE
 
     const texture = new THREE.CanvasTexture(canvas);
 
-    const geo = new THREE.PlaneGeometry(30, 30); // CARRÉ
+    const geo = new THREE.PlaneGeometry(30, 30);
     const mat = new THREE.MeshBasicMaterial({ 
         map: texture,
         transparent: true, 
@@ -296,11 +295,10 @@ function createHolos() {
         depthWrite: false
     });
 
-    // 2. BOUCLE DE PLACEMENT (1 ligne sur 2, arrêt à la 8ème)
-    // On commence à i=2 (pour ne pas être sur le joueur), on incrémente de 2
+    // LIGNES 2, 4, 6, 8 SEULEMENT
     for(let i=2; i<=8; i+=2) {
         const holo = new THREE.Mesh(geo, mat);
-        holo.position.set(0, 5, -i * CONFIG.TILE); // Position précise sur la ligne
+        holo.position.set(0, 5, -i * CONFIG.TILE); 
         holo.rotation.x = -Math.PI / 2; // A plat
         scene.add(holo);
         holos.push({ mesh: holo, baseY: 5 });
@@ -435,11 +433,9 @@ function animate() {
         const delta = clock.getDelta();
         const time = Date.now() * 0.005;
         
-        // ANIMATION : Pulsation sur place, sans avancer
+        // ANIMATION : Pulsation sur place uniquement
         holos.forEach((h, index) => {
-            // Flottement vertical (Haut/Bas)
             h.mesh.position.y = h.baseY + Math.sin(time * 3 + index) * 2;
-            // Pulsation de taille
             const s = 1 + Math.sin(time * 5 + index) * 0.1;
             h.mesh.scale.set(s, s, s);
         });
