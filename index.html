@@ -9,7 +9,7 @@
 
 <style>
     @import url("https://fonts.googleapis.com/css?family=Press+Start+2P");
-    @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+    @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap");
 
     body { 
         margin: 0; overflow: hidden; background-color: #2c3e50; 
@@ -17,16 +17,14 @@
     }
     canvas { display: block; width: 100%; height: 100%; outline: none; }
 
-    /* --- UI GLOBALE --- */
+    /* UI GLOBALE */
     .screen {
         position: absolute; top: 0; left: 0; width: 100%; height: 100%;
         display: flex; flex-direction: column; justify-content: center; align-items: center;
         text-align: center; color: white; z-index: 1000;
-        /* Fond dégradé plus esthétique */
         background: radial-gradient(circle at center, #2c3e50 0%, #000000 100%);
     }
     
-    /* TITRE PRINCIPAL */
     h1 { 
         font-size: 32px; color: #fff; 
         text-shadow: 4px 4px 0 #000; 
@@ -34,7 +32,6 @@
         text-transform: uppercase;
         position: relative;
     }
-    /* Ligne jaune décorative sous le titre */
     h1::after {
         content: ''; display: block; width: 100px; height: 6px; 
         background: #f1c40f; margin: 15px auto; 
@@ -46,7 +43,6 @@
         margin-bottom: 40px; display: block; font-family: 'Roboto', sans-serif; font-weight: bold;
     }
     
-    /* CADRE INFO RADAR AMÉLIORÉ */
     .info-radar {
         border: 2px solid rgba(255,255,255,0.1);
         background: rgba(0,0,0,0.6);
@@ -62,7 +58,6 @@
     .radar-label { color: #f1c40f; font-size: 10px; margin-bottom: 5px; display: block; }
     .radar-text { font-family: 'Roboto', sans-serif; font-size: 18px; color: #fff; font-weight: bold; letter-spacing: 1px; }
     
-    /* BOUTON START */
     .btn-start {
         padding: 20px 50px; font-size: 20px; font-family: "Press Start 2P"; 
         color: #fff; background: #2ecc71; border: none; border-radius: 50px; 
@@ -72,7 +67,6 @@
     .btn-start:hover { transform: scale(1.05); box-shadow: 0 15px 30px rgba(46, 204, 113, 0.6); }
     .btn-start:active { transform: scale(0.95); }
 
-    /* CREDITS (En bas à gauche) */
     .credits-box {
         position: absolute; bottom: 20px; left: 20px;
         font-family: 'Roboto', sans-serif; text-align: left;
@@ -81,7 +75,6 @@
     .credits-title { font-weight: bold; color: #f1c40f; margin-bottom: 5px; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
     .credits-names { line-height: 1.4; font-size: 11px; }
 
-    /* AUTRES BOUTONS */
     .btn-retry {
         padding: 15px 30px; font-size: 14px; font-family: "Press Start 2P"; 
         background: transparent; border: 2px solid white; color: white; cursor: pointer; margin-top: 20px;
@@ -89,7 +82,6 @@
     .btn-retry:hover { background: white; color: black; }
     .btn-info { border: none; background: #8e44ad; border-radius: 5px; font-size: 14px; padding: 15px 30px; color: white; font-family: "Press Start 2P"; cursor: pointer;}
 
-    /* POPUPS & RESTE UI */
     .popup-overlay {
         position: absolute; top: 0; left: 0; width: 100%; height: 100%;
         background: rgba(0, 0, 0, 0.95); display: flex; justify-content: center; align-items: center;
@@ -120,21 +112,15 @@
             <h1>DON'T CROSS<br>THE YELLOW LINE</h1>
             <span class="subtitle">UNE EXPÉRIENCE INTERACTIVE</span>
         </div>
-        
         <div class="info-radar">
             <span class="radar-label">OBJECTIF DU SYSTÈME</span>
             <span class="radar-text">ATTEINDRE LA LIGNE JAUNE (100)</span>
         </div>
-
         <button class="btn-start" onclick="lancerJeu()">JOUER</button>
-
         <div class="credits-box">
             <div class="credits-title">RÉALISATION</div>
             <div class="credits-names">
-                Axel Pic<br>
-                Pierre-Louis Gousset<br>
-                Adrien Fang<br>
-                Pierre.S
+                Axel Pic<br>Pierre-Louis Gousset<br>Adrien Fang<br>Pierre.S
             </div>
         </div>
     </div>
@@ -150,9 +136,9 @@
     </div>
 
     <div id="moral-fail-screen" class="screen" style="display:none;">
-        <h1 style="color:#f1c40f; font-size:30px;">VOUS AVEZ SUIVI<br>LA SOCIÉTÉ</h1>
+        <h1 style="color:#e74c3c; font-size:30px;">VOUS AVEZ SUIVI<br>LA SOCIÉTÉ</h1>
         <div style="max-width:500px; padding:20px;">
-            <p style="color:#fff; font-size:20px; font-weight:bold;">Game Over.</p>
+            <p style="color:#e74c3c; font-size:20px; font-weight:bold;">Game Over.</p>
             <p style="color:#ccc; font-size:16px;">
                 "Parfois, il faut aller à l'encontre de la société pour que les choses changent. Ne suivez pas aveuglément la ligne tracée."
             </p>
@@ -200,7 +186,6 @@ window.onload = function() {
     }
 };
 
-// --- DATA ---
 const factsDB = [
     { t: "Une femme meurt tous les 3 jours sous les coups de son conjoint.", s: "Source : Ministère de l'Intérieur" },
     { t: "100% des utilisatrices de transports ont déjà subi du harcèlement.", s: "Source : HCEfh" },
@@ -222,8 +207,9 @@ let isMoving = false;
 let moveQueue = null;
 const clock = new THREE.Clock();
 let audioCtx = null;
+let holos = []; 
 
-// --- GESTION START / RELOAD ---
+// GESTION JEU
 window.lancerJeu = function() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('score-hud').style.display = 'block';
@@ -238,7 +224,6 @@ window.lancerJeu = function() {
     }
 };
 
-// RELOAD FORCE
 window.reloadPage = function() {
     window.location.reload();
 };
@@ -257,6 +242,7 @@ function initThreeJS() {
     renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
+    renderer.capabilities.getMaxAnisotropy();
 
     const ambient = new THREE.AmbientLight(0xffffff, 0.7);
     scene.add(ambient);
@@ -272,11 +258,46 @@ function initThreeJS() {
     scene.add(mapGroup);
     
     createPlayer();
+    createHolos(); // FLÈCHES AU SOL UNIQUEMENT
     resetGame();
     animate();
 
     window.addEventListener('resize', onResize);
     window.addEventListener('keydown', onKeyDown);
+}
+
+// --- NOUVELLES FLÈCHES SIMPLIFIÉES ---
+function createHolos() {
+    // 1. Texture avec UNE SEULE grosse flèche
+    const canvas = document.createElement('canvas');
+    canvas.width = 128; canvas.height = 128;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ff0000'; // ROUGE
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = 'bold 100px Arial'; // GROS
+    ctx.fillText('⬆', 64, 64); 
+
+    const texture = new THREE.CanvasTexture(canvas);
+
+    const geo = new THREE.PlaneGeometry(30, 30); // CARRÉ
+    const mat = new THREE.MeshBasicMaterial({ 
+        map: texture,
+        transparent: true, 
+        opacity: 0.8,
+        side: THREE.DoubleSide,
+        depthWrite: false
+    });
+
+    // 2. BOUCLE DE PLACEMENT (1 ligne sur 2, arrêt à la 8ème)
+    // On commence à i=2 (pour ne pas être sur le joueur), on incrémente de 2
+    for(let i=2; i<=8; i+=2) {
+        const holo = new THREE.Mesh(geo, mat);
+        holo.position.set(0, 5, -i * CONFIG.TILE); // Position précise sur la ligne
+        holo.rotation.x = -Math.PI / 2; // A plat
+        scene.add(holo);
+        holos.push({ mesh: holo, baseY: 5 });
+    }
 }
 
 function createPlayer() {
@@ -405,6 +426,16 @@ function spawnLane(index) {
 function animate() {
     if(gameState === 'PLAYING') {
         const delta = clock.getDelta();
+        const time = Date.now() * 0.005;
+        
+        // ANIMATION : Pulsation sur place, sans avancer
+        holos.forEach((h, index) => {
+            // Flottement vertical (Haut/Bas)
+            h.mesh.position.y = h.baseY + Math.sin(time * 3 + index) * 2;
+            // Pulsation de taille
+            const s = 1 + Math.sin(time * 5 + index) * 0.1;
+            h.mesh.scale.set(s, s, s);
+        });
         
         for(let i = currentPos.y - 15; i < currentPos.y + 20; i++){
             const lane = lanes[i + OFFSET];
@@ -472,7 +503,7 @@ window.inputAction = function(dx, dy) {
     if(lane && lane.obstacles.includes(nx)) return;
 
     isMoving = true;
-    playSound('jump');
+    playSound('move');
     if(dx===1) player.rotation.y = -Math.PI/2;
     else if(dx===-1) player.rotation.y = Math.PI/2;
     else if(dy===1) player.rotation.y = 0;
@@ -548,12 +579,16 @@ function playSound(type) {
     o.connect(g); g.connect(audioCtx.destination);
     const t = audioCtx.currentTime;
     
-    if(type==='jump'){
-        o.frequency.setValueAtTime(150,t); o.frequency.linearRampToValueAtTime(300,t+0.1);
-        g.gain.setValueAtTime(0.1,t); g.gain.linearRampToValueAtTime(0,t+0.1);
+    if(type==='move'){
+        const randomPitch = Math.random() * 50 - 25; 
+        o.type = 'sine';
+        o.frequency.setValueAtTime(300 + randomPitch, t);
+        o.frequency.exponentialRampToValueAtTime(500 + randomPitch, t + 0.1);
+        g.gain.setValueAtTime(0.1, t);
+        g.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
         o.start(t); o.stop(t+0.1);
     } 
-    else if(type==='crash'){ // MARIO DEATH THEME
+    else if(type==='crash'){ 
         o.type='square'; 
         const notes = [
             {f:493,d:0.1}, {f:698,d:0.1}, {f:0,d:0.05}, {f:698,d:0.1}, 
@@ -576,7 +611,7 @@ function playSound(type) {
         g.gain.setValueAtTime(0.1,t); g.gain.linearRampToValueAtTime(0,t+0.3);
         o.start(t); o.stop(t+0.3);
     } 
-    else if(type==='win'){ // MARIO VICTORY
+    else if(type==='win'){ 
         const notes = [
             {f:392,d:0.1}, {f:523,d:0.1}, {f:659,d:0.1}, {f:784,d:0.1}, 
             {f:1046,d:0.1}, {f:1568,d:0.4}
